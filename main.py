@@ -102,12 +102,12 @@ def display(movie):
     print("Show Timings :", movie.show_timings)
     print("1. Book Tickets")
     print("2. Cancel Tickets")
-    ch = int(input("Enter :"))
-    return ch
+    choice = int(input("Enter :"))
+    return choice
 
 
 def admin():
-    print("******Welcome Admin*******")
+    print("******Welcome Admin********")
 
     while True:
         print("1. Add New Movie")

@@ -1,1 +1,1 @@
-# mini-assignmeny
+# mini-assignment

@@ -1,5 +1,6 @@
 
 import getpass
+import request
 
 # menu print function
 def print_menu(menu_options):
@@ -301,6 +302,7 @@ def userMenu():
             movieDetail(option-1)
         
 #entry point
+#main method
 if __name__=="__main__":
     # initialization
     userList=[]
@@ -326,7 +328,7 @@ if __name__=="__main__":
     1: 'Add New Movies',
     2: 'Update Movie details',
     3: 'Delete A Movie',
-    4:'Admin Logout'
+    4: 'Admin Logout'
 }
 
 

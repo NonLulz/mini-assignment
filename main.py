@@ -1,5 +1,56 @@
+# class Movie:
+#     def __init__(self, title, genre, length, cast, director, admin_rating, show_timings, language, capacity):
+#         self.title = title
+#         self.genre = genre
+#         self.length = length
+#         self.cast = cast
+#         self.director = director
+#         self.admin_rating = admin_rating
+#         self.show_timings = show_timings
+#         self.language = language
+#         self.capacity = capacity
+
+
 class Movie:
-    def __init__(self, title, genre, length, cast, director, admin_rating, show_timings, language, capacity):
+    """
+    Represents a movie/show with relevant details.
+    """
+
+    def __init__(
+        self,
+        title: str,
+        genre: str,
+        length: int,  # in minutes
+        cast: list[str],
+        director: str,
+        admin_rating: float,  # 0.0 - 10.0
+        show_timings: list[str],  # e.g., ["10:00 AM", "2:00 PM"]
+        language: str,
+        capacity: int  # max audience capacity
+    ) -> None:
+        """
+        Initialize a Movie object.
+
+        Args:
+            title (str): The name of the movie.
+            genre (str): The genre (e.g., "Action", "Comedy").
+            length (int): Duration of the movie in minutes.
+            cast (list[str]): List of actors/actresses.
+            director (str): Name of the director.
+            admin_rating (float): Rating assigned by admin (0.0 to 10.0).
+            show_timings (list[str]): Available show times.
+            language (str): Language of the movie.
+            capacity (int): Maximum seating capacity for the show.
+        """
+        if not title:
+            raise ValueError("Movie title cannot be empty.")
+        if length <= 0:
+            raise ValueError("Movie length must be a positive number.")
+        if not (0.0 <= admin_rating <= 10.0):
+            raise ValueError("Admin rating must be between 0.0 and 10.0.")
+        if capacity <= 0:
+            raise ValueError("Capacity must be a positive number.")
+
         self.title = title
         self.genre = genre
         self.length = length
@@ -9,7 +60,6 @@ class Movie:
         self.show_timings = show_timings
         self.language = language
         self.capacity = capacity
-
 
 class User:
     def __init__(self, name, email, password):

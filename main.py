@@ -10,6 +10,8 @@
 #         self.language = language
 #         self.capacity = capacity
 
+import hashlib
+from typing import Dict
 
 class Movie:
     """
@@ -61,34 +63,118 @@ class Movie:
         self.language = language
         self.capacity = capacity
 
+# class User:
+#     def __init__(self, name, email, password):
+#         self.name = name
+#         self.email = email
+#         self.password = password
+#         self.role = "user"
+#         self.booked_tickets = {}
+
+
+# class Users:
+#     users = {}
+
+#     @classmethod
+#     def register(self, username, user):
+#         self.users[username] = user
+
+#     @classmethod
+#     def login_user(self, username, password):
+#         if self.users.get(username) is None:
+#             return False
+#         if self.users.get(username).password != password:
+#             return False
+#         return True
+
+#     @classmethod
+#     def get_user(self, username):
+#         return self.users[username]
+
 class User:
-    def __init__(self, name, email, password):
-        self.name = name
-        self.email = email
-        self.password = password
-        self.role = "user"
-        self.booked_tickets = {}
+    """
+    Represents a single user in the system.
+    """
+
+    def __init__(self, name: str, email: str, password: str) -> None:
+        """
+        Initialize a User object.
+
+        Args:
+            name (str): The user's full name.
+            email (str): The user's email address.
+            password (str): The user's password (will be stored as a hash).
+        """
+        if not name:
+            raise ValueError("Name cannot be empty.")
+        if "@" not in email:
+            raise ValueError("Invalid email address.")
+        if not password or len(password) < 6:
+            raise ValueError("Password must be at least 6 characters long.")
+
+        self.name: str = name
+        self.email: str = email
+        self.password: str = self._hash_password(password)
+        self.role: str = "user"
+        self.booked_tickets: Dict[str, int] = {}  # movie_title -> tickets booked
+
+    def _hash_password(self, password: str) -> str:
+        """Hash the password using SHA-256 for security."""
+        return hashlib.sha256(password.encode()).hexdigest()
+
+    def verify_password(self, password: str) -> bool:
+        """Verify a provided password against the stored hash."""
+        return self.password == hashlib.sha256(password.encode()).hexdigest()
 
 
 class Users:
-    users = {}
+    """
+    Manages a collection of registered users.
+    """
+    users: Dict[str, User] = {}
 
     @classmethod
-    def register(self, username, user):
-        self.users[username] = user
+    def register(cls, username: str, user: User) -> None:
+        """
+        Register a new user.
+
+        Args:
+            username (str): Unique username identifier.
+            user (User): User object.
+        """
+        if username in cls.users:
+            raise ValueError("Username already exists.")
+        cls.users[username] = user
 
     @classmethod
-    def login_user(self, username, password):
-        if self.users.get(username) is None:
+    def login_user(cls, username: str, password: str) -> bool:
+        """
+        Validate login credentials.
+
+        Args:
+            username (str): Username identifier.
+            password (str): Plain-text password to verify.
+
+        Returns:
+            bool: True if login is successful, False otherwise.
+        """
+        user = cls.users.get(username)
+        if user is None:
             return False
-        if self.users.get(username).password != password:
-            return False
-        return True
+        return user.verify_password(password)
 
     @classmethod
-    def get_user(self, username):
-        return self.users[username]
+    def get_user(cls, username: str) -> User | None:
+        """
+        Retrieve a user by username.
 
+        Args:
+            username (str): Username identifier.
+
+        Returns:
+            User | None: User object if found, otherwise None.
+        """
+        return cls.users.get(username)
 
 class Movies:
     movies = {}

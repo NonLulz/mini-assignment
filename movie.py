@@ -172,42 +172,77 @@ def movieDetail(num):
 
 
 # user,admin login
-def login():
-    username=''
-    try:
-        username=input('Enter Email\n') 
+# def login():
+#     username=''
+#     try:
+#         username=input('Enter Email\n') 
     
-        pswd = getpass.getpass('Password:\n')      
+#         pswd = getpass.getpass('Password:\n')      
  
-    except:
-        print('Inavlid input type')
+#     except:
+#         print('Inavlid input type')
     
     
-    if '@admin.com' in username :
-        # check if mail is admin type then validate
-            for k in adminList:
-                if k['username']==username and k['password']==pswd:
-                        print('admin')
-                        adminMenu()
-                else:
-                        print('wrong password')
-                        main()
+#     if '@admin.com' in username :
+#         # check if mail is admin type then validate
+#             for k in adminList:
+#                 if k['username']==username and k['password']==pswd:
+#                         print('admin')
+#                         adminMenu()
+#                 else:
+#                         print('wrong password')
+#                         main()
            
         
-    else:
-        try:
-            # get the user
-            filterd=list(filter(lambda person: person['username'] == username,userList)).pop()
-            # validate
-            if filterd['password']==pswd:
+#     else:
+#         try:
+#             # get the user
+#             filterd=list(filter(lambda person: person['username'] == username,userList)).pop()
+#             # validate
+#             if filterd['password']==pswd:
     
-                userMenu()
-            else:
-                print("Wrong password\n")
-                userMenu()
+#                 userMenu()
+#             else:
+#                 print("Wrong password\n")
+#                 userMenu()
             
-        except:
-                print('user Not found')
+#         except:
+#                 print('user Not found')
+
+import getpass
+
+def login() -> None:
+    """
+    Handle user login flow for admin and normal users.
+    """
+
+    try:
+        username = input("Enter Email: ").strip()
+        password = getpass.getpass("Password: ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print("\nLogin cancelled.")
+        return
+
+    # Retrieve user from registry
+    user = Users.get_user(username)
+
+    if not user:
+        print("User not found.\n")
+        return
+
+    # Validate password securely
+    if not user.verify_password(password):
+        print("Wrong password.\n")
+        return
+
+    # Route based on role
+    if user.role == "admin":
+        print("Welcome, Admin!\n")
+        adminMenu()
+    else:
+        print(f"Welcome, {user.name}!\n")
+        userMenu()
+
 
 # user reg template
 class UserReg:

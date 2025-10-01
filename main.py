@@ -287,24 +287,59 @@ def book_tickets(movie):
 
 
 
-def main():
-    admin = User("admin", "admin@example.com","1q2w3e4r5t6y")
-    admin.role = "admin"
-    Users.users[admin.email] = admin
+# def main():
+#     admin = User("admin", "admin@example.com","1q2w3e4r5t6y")
+#     admin.role = "admin"
+#     Users.users[admin.email] = admin
 
-    print("*********** WELCOME TO BOOK MY SHOW ***********")
+#     print("*********** WELCOME TO BOOK MY SHOW ***********")
+#     while True:
+#         print("1. Login")
+#         print("2. Register")
+#         print("3. Exit")
+
+#         ch = int(input("Enter: "))
+#         if ch == 1:
+#             login_handler()
+#         elif ch== 2:
+#             register_handler()
+#         elif ch== 3:
+#             break
+#         else:
+#             print("Invalid input")
+
+def main() -> None:
+    """
+    Entry point for the Book My Show application.
+    Provides a simple CLI menu for user login, registration, and exit.
+    """
+
+    # Create admin user (for demo purposes only; in real apps, load from config/DB)
+    admin = User("admin", "admin@example.com", "1q2w3e4r5t6y")
+    admin.role = "admin"
+    Users.register(admin.email, admin)
+
+    print("\n*********** WELCOME TO BOOK MY SHOW ***********\n")
+
     while True:
         print("1. Login")
         print("2. Register")
         print("3. Exit")
 
-        ch = int(input("Enter: "))
+        choice = input("Enter choice: ").strip()
+
+        if not choice.isdigit():
+            print("Invalid input. Please enter a number.\n")
+            continue
+
+        ch = int(choice)
         if ch == 1:
             login_handler()
-        elif ch== 2:
+        elif ch == 2:
             register_handler()
-        elif ch== 3:
+        elif ch == 3:
+            print("Exiting... Goodbye!")
             break
         else:
-            print("Invalid input")
+            print("Invalid option. Please try again.\n")
 

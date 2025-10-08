@@ -1,3 +1,13 @@
+
+DATA_DIR = "data"
+MOVIES_FILE = f"{DATA_DIR}/movies.json"
+USERS_FILE = f"{DATA_DIR}/users.json"
+
+MENU_BOOK = "1"
+MENU_CANCEL = "2"
+
+
+
 class Movie:
     def __init__(self, title, genre, total_seats):
         self.title = title

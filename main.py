@@ -343,3 +343,6 @@ def main() -> None:
         else:
             print("Invalid option. Please try again.\n")
 
+print("\033[92m✅ Booking successful!\033[0m")  # Green
+print("\033[91m❌ Booking failed: Not enough seats.\033[0m")  # Red
+

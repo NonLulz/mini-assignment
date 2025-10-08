@@ -12,6 +12,8 @@
 
 import hashlib
 from typing import Dict
+from booking_system import BookingSystem
+
 
 class Movie:
     """
@@ -308,41 +310,104 @@ def book_tickets(movie):
 #         else:
 #             print("Invalid input")
 
-def main() -> None:
-    """
-    Entry point for the Book My Show application.
-    Provides a simple CLI menu for user login, registration, and exit.
-    """
+# def main() -> None:
+#     """
+#     Entry point for the Book My Show application.
+#     Provides a simple CLI menu for user login, registration, and exit.
+#     """
 
-    # Create admin user (for demo purposes only; in real apps, load from config/DB)
-    admin = User("admin", "admin@example.com", "1q2w3e4r5t6y")
-    admin.role = "admin"
-    Users.register(admin.email, admin)
+#     # Create admin user (for demo purposes only; in real apps, load from config/DB)
+#     admin = User("admin", "admin@example.com", "1q2w3e4r5t6y")
+#     admin.role = "admin"
+#     Users.register(admin.email, admin)
 
-    print("\n*********** WELCOME TO BOOK MY SHOW ***********\n")
+#     print("\n*********** WELCOME TO BOOK MY SHOW ***********\n")
+
+#     while True:
+#         print("1. Login")
+#         print("2. Register")
+#         print("3. Exit")
+
+#         choice = input("Enter choice: ").strip()
+
+#         if not choice.isdigit():
+#             print("Invalid input. Please enter a number.\n")
+#             continue
+
+#         ch = int(choice)
+#         if ch == 1:
+#             login_handler()
+#         elif ch == 2:
+#             register_handler()
+#         elif ch == 3:
+#             print("Exiting... Goodbye!")
+#             break
+#         else:
+#             print("Invalid option. Please try again.\n")
+
+# print("\033[92m✅ Booking successful!\033[0m")  # Green
+# print("\033[91m❌ Booking failed: Not enough seats.\033[0m")  # Red
+
+
+def prompt_int(message):
+    while True:
+        try:
+            return int(input(message))
+        except ValueError:
+            print("\033[91m⚠️ Please enter a valid number.\033[0m")
+
+def main():
+    system = BookingSystem()
 
     while True:
-        print("1. Login")
-        print("2. Register")
+        print("\nMovies Available:")
+        system.list_movies()
+        print("\nOptions:")
+        print("1. Book seats")
+        print("2. Cancel booking")
         print("3. Exit")
 
-        choice = input("Enter choice: ").strip()
+        choice = input("Choose an option: ").strip()
 
-        if not choice.isdigit():
-            print("Invalid input. Please enter a number.\n")
-            continue
+        if choice == "1":
+            username = input("Username: ").strip()
+            password = input("Password: ").strip()
+            user = system.login(username, password)
+            if not user:
+                print("\033[91m❌ Invalid login credentials.\033[0m")
+                continue
 
-        ch = int(choice)
-        if ch == 1:
-            login_handler()
-        elif ch == 2:
-            register_handler()
-        elif ch == 3:
-            print("Exiting... Goodbye!")
+            movie_title = input("Enter movie title: ").strip()
+            count = prompt_int("Number of seats to book: ")
+
+            if system.book_seats(username, movie_title, count):
+                print("\033[92m✅ Booking successful!\033[0m")
+            else:
+                print("\033[91m❌ Booking failed. Not enough seats or invalid movie.\033[0m")
+
+        elif choice == "2":
+            username = input("Username: ").strip()
+            password = input("Password: ").strip()
+            user = system.login(username, password)
+            if not user:
+                print("\033[91m❌ Invalid login credentials.\033[0m")
+                continue
+
+            movie_title = input("Enter movie title to cancel booking: ").strip()
+            count = prompt_int("Number of seats to cancel: ")
+
+            if system.cancel_booking(username, movie_title, count):
+                print("\033[92m✅ Cancellation successful!\033[0m")
+            else:
+                print("\033[91m❌ Cancellation failed. Check your bookings.\033[0m")
+
+        elif choice == "3":
+            print("Exiting. Goodbye!")
             break
         else:
-            print("Invalid option. Please try again.\n")
+            print("\033[91m⚠️ Invalid option. Please try again.\033[0m")
 
-print("\033[92m✅ Booking successful!\033[0m")  # Green
-print("\033[91m❌ Booking failed: Not enough seats.\033[0m")  # Red
+if __name__ == "__main__":
+    main()
+
 
